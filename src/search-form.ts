@@ -21,6 +21,7 @@ export function renderSearchFormBlock(
   let checkInDate: Date = checkIn || dateTommorow;
   let checkOutDate: Date = checkOut || new Date(checkInDate.getTime() + oneDay * 2);
 
+
   renderBlock(
     'search-form-block',
     `
