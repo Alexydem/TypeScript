@@ -1,11 +1,22 @@
 import { renderBlock } from './lib.js';
+//Создать интерфейс SearchFormData, в котором описать структуру для полей поисковой формы.
+//Написать функцию-обработчик формы search, которая собирает заполненные пользователем данные в формате описанной структуры 
+//и передаёт их в функцию поиска.
+//Функция поиска принимает как аргумент переменную интерфейса SearchFormData, 
+//выводит полученный аргумент в консоль и ничего не возвращает.
+// search({
+//   city,
+//   checkInDate,
+//   checkOutDate,
+//   maxPrice
+// })
+function formatDate(date) {
+    const year = date.getFullYear();
+    const month = (date.getMonth() + 1).toString().padStart(2, "0");
+    const day = date.getDate().toString().padStart(2, "0");
+    return `${year}-${month}-${day}`;
+}
 export function renderSearchFormBlock(checkIn, checkOut) {
-    function formatDate(date) {
-        const year = date.getFullYear();
-        const month = (date.getMonth() + 1).toString().padStart(2, "0");
-        const day = date.getDate().toString().padStart(2, "0");
-        return `${year}-${month}-${day}`;
-    }
     let dateNow = new Date(); //сегодня
     let oneDay = 24 * 60 * 60 * 1000;
     let dateTommorow = new Date((Date.now()) + oneDay); //дата завтра
@@ -13,6 +24,9 @@ export function renderSearchFormBlock(checkIn, checkOut) {
     let lastDayNextMonth = new Date(nextNextMonth - 1); // последний день следующего месяца
     let checkInDate = checkIn || dateTommorow;
     let checkOutDate = checkOut || new Date(checkInDate.getTime() + oneDay * 2);
+    function search(value) {
+        console.log(value);
+    }
     renderBlock('search-form-block', `
     <form>
       <fieldset class="search-filedset">
@@ -57,5 +71,26 @@ export function renderSearchFormBlock(checkIn, checkOut) {
       </fieldset>
     </form>
     `);
-    // }
+    // @ts-ignore
+    let city = document.getElementById('city').value;
+    let checkInValue = formatDate(checkInDate);
+    let checkOutValue = formatDate(checkOutDate);
+    // @ts-ignore
+    let maxPrice = document.getElementById('max-price').value;
+    let maxPriceValue;
+    if (maxPrice < 0) {
+        maxPriceValue = 'Введите положительное число';
+    }
+    else if (maxPrice = 0) {
+        maxPriceValue = 0;
+    }
+    else {
+        maxPriceValue = maxPrice;
+    }
+    search({
+        city,
+        checkInValue,
+        checkOutValue,
+        maxPriceValue
+    });
 }
