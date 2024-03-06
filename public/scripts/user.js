@@ -15,6 +15,10 @@ export function getUserData(keyUser) {
     return undefined;
 }
 // читает ключ favoritesAmount ( применить подход с unknown, чтобы валидировать содержимое localStorage)
+//////////////
+//////////////
+////////////// в локале нормально считается количество избранных. надо чтобы сюда передавалось
+//////////////
 export function getFavoritesAmount(keyFavoritesAmount) {
     const userFavoriteItem = localStorage.getItem(keyFavoritesAmount);
     let amount;
@@ -34,7 +38,7 @@ export function renderUserBlock(name, avatar, favoriteItemsAmount) {
       <div class="info">
           <p class="name">${name}</p>
           <p class="fav">
-            <i class="heart-icon${hasFavoriteItems ? ' active' : ''}"></i>${favoritesCaption}
+            <i class="heart-icon${hasFavoriteItems ? 'active' : ''}"></i>${favoritesCaption}
           </p>
       </div>
     </div>

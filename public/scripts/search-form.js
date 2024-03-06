@@ -1,15 +1,5 @@
 import { renderBlock } from './lib.js';
-//Создать интерфейс SearchFormData, в котором описать структуру для полей поисковой формы.
-//Написать функцию-обработчик формы search, которая собирает заполненные пользователем данные в формате описанной структуры 
-//и передаёт их в функцию поиска.
-//Функция поиска принимает как аргумент переменную интерфейса SearchFormData, 
-//выводит полученный аргумент в консоль и ничего не возвращает.
-// search({
-//   city,
-//   checkInDate,
-//   checkOutDate,
-//   maxPrice
-// })
+import { getPlaceInfo } from './search-results.js';
 function formatDate(date) {
     const year = date.getFullYear();
     const month = (date.getMonth() + 1).toString().padStart(2, "0");
@@ -24,9 +14,8 @@ export function renderSearchFormBlock(checkIn, checkOut) {
     let lastDayNextMonth = new Date(nextNextMonth - 1); // последний день следующего месяца
     let checkInDate = checkIn || dateTommorow;
     let checkOutDate = checkOut || new Date(checkInDate.getTime() + oneDay * 2);
-    function search(value) {
-        console.log(value);
-    }
+    // @ts-ignore
+    let priceValue = 0; //научиться при ундефинед выдавать слово "введите значение"
     renderBlock('search-form-block', `
     <form>
       <fieldset class="search-filedset">
@@ -62,35 +51,47 @@ export function renderSearchFormBlock(checkIn, checkOut) {
           </div>
           <div>
             <label for="max-price">Макс. цена суток</label>
-            <input id="max-price" type="text" value="" name="price" class="max-price" />
+            <input id="max-price" type="text" value="введите цену" name="price" class="max-price" />
           </div>
           <div>
-            <div><button>Найти</button></div>
+            <div><button id="search-button">Найти</button></div>
           </div>
         </div>
       </fieldset>
     </form>
     `);
-    // @ts-ignore
-    let city = document.getElementById('city').value;
-    let checkInValue = formatDate(checkInDate);
-    let checkOutValue = formatDate(checkOutDate);
-    // @ts-ignore
-    let maxPrice = document.getElementById('max-price').value;
-    let maxPriceValue;
-    if (maxPrice < 0) {
-        maxPriceValue = 'Введите положительное число';
+    //функция выводит в консоль то что хотим искать
+    function searchConsoleLog(value) {
+        console.log(value.city);
+        console.log(value.checkInValue);
+        console.log(value.checkOutValue);
+        console.log(value.maxPriceValue);
     }
-    else if (maxPrice = 0) {
-        maxPriceValue = 0;
-    }
-    else {
-        maxPriceValue = maxPrice;
-    }
-    search({
-        city,
-        checkInValue,
-        checkOutValue,
-        maxPriceValue
+    //при нажатии на кнопку в консоль выводятся данные поиска но страница тут же обновляется
+    document.getElementById('search-button').addEventListener("click", function () {
+        event.preventDefault(); //теперь он накидывать к результатам все новое и новое!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+        // @ts-ignore
+        let city = document.getElementById('city').value;
+        let checkInValue = formatDate(checkInDate);
+        let checkOutValue = formatDate(checkOutDate);
+        //////////////////////////////////не видит чисдло. всегда 0 показывает. узнать как доставать число из строки поиска
+        // @ts-ignore
+        let maxPriceValue = document.getElementById('max-price').value;
+        if (isNaN(maxPriceValue) || maxPriceValue <= 0) {
+            maxPriceValue = 0;
+        }
+        searchConsoleLog({
+            city,
+            checkInValue,
+            checkOutValue,
+            maxPriceValue,
+        });
+        const searchParams = {
+            city: city,
+            checkInValue: checkInValue,
+            checkOutValue: checkOutValue,
+            maxPriceValue: maxPriceValue
+        };
+        getPlaceInfo(searchParams);
     });
 }

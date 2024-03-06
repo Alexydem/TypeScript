@@ -2,13 +2,15 @@ import { renderSearchFormBlock } from './search-form.js';
 import { renderSearchStubBlock } from './search-results.js';
 import { renderUserBlock, setUserData, getUserData, getFavoritesAmount } from './user.js';
 import { renderToast } from './lib.js';
+import { renderSearchResultsBlock } from './search-results.js';
 setUserData('Тетя Нина', "/img/avatar.png", 0);
 let user = getUserData('user');
-let favoritesAmount = getFavoritesAmount('favoritesAmount').amount;
+let favoritesAmount = getFavoritesAmount('keyFavoritesAmount');
 window.addEventListener('DOMContentLoaded', () => {
     renderUserBlock(user.name, user.avatar, favoritesAmount);
     renderSearchFormBlock();
     renderSearchStubBlock();
+    renderSearchResultsBlock();
     renderToast({
         text: 'Это пример уведомления. Используйте его при необходимости',
         type: 'success'

@@ -9,15 +9,22 @@ import {
   Amount
 } from './user.js'
 import { renderToast } from './lib.js'
+import { renderSearchResultsBlock } from './search-results.js'
 
 setUserData('Тетя Нина', "/img/avatar.png", 0)
 let user: userData = getUserData('user')
-let favoritesAmount: number = getFavoritesAmount('favoritesAmount').amount
+let favoritesAmount: Amount = getFavoritesAmount('keyFavoritesAmount')
+
 
 window.addEventListener('DOMContentLoaded', () => {
   renderUserBlock(user.name, user.avatar, favoritesAmount)
   renderSearchFormBlock()
   renderSearchStubBlock()
+  renderSearchResultsBlock()
+
+
+
+
   renderToast(
     {
       text: 'Это пример уведомления. Используйте его при необходимости',
